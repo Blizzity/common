@@ -1,55 +1,79 @@
-# Blizzity Common
+# 
+
+Archives containing JAR files are available as [releases](https://github.com/Blizzity/common/releases).
+
+## What is common?
 
 Shared utility library for Blizzity projects — argument parsing, password hashing, key generation, and math helpers.
 
-## Installation
+## Usage in private projects
 
-Add the dependency using [github-gradle](https://github.com/intisy/github-gradle):
-
-```groovy
-plugins {
-    id "io.github.intisy.github-gradle" version "1.8.2.1"
-}
-
-dependencies {
-    githubImplementation "intisy:blizzity-common:1.0"
-}
+ * Maven (inside the  file)
+```xml
+  <repository>
+      <id>github</id>
+      <url>https://maven.pkg.github.com/Blizzity/common</url>
+      <snapshots><enabled>true</enabled></snapshots>
+  </repository>
+  <dependency>
+      <groupId>io.github.intisy</groupId>
+      <artifactId>common</artifactId>
+      <version>1.0</version>
+  </dependency>
 ```
 
-## Usage
+ * Maven (inside the  file)
+```xml
+  <servers>
+      <server>
+          <id>github</id>
+          <username>your-username</username>
+          <password>your-access-token</password>
+      </server>
+  </servers>
+```
 
-```java
-// CLI argument parsing with .env directory support
+ * Gradle (inside the  or  file)
+```groovy
+  repositories {
+      maven {
+          url "https://maven.pkg.github.com/Blizzity/common"
+          credentials {
+              username = "<your-username>"
+              password = "<your-access-token>"
+          }
+      }
+  }
+  dependencies {
+      implementation 'io.github.intisy:common:1.0'
+  }
+```
+
+## Usage in public projects
+
+ * Gradle (inside the  or  file)
+```groovy
+  plugins {
+      id "io.github.intisy.github-gradle" version "1.3.7"
+  }
+  dependencies {
+      githubImplementation "intisy:common:1.0"
+  }
+```
+
+Once you have it installed you can use it like so:
+
+```
 Arguments args = new Arguments(new String[]{"--debug", "--port=8080"});
 String port = args.get("port", "3000");
 boolean debug = args.getAsBoolean("debug");
 
-// Password hashing (PBKDF2)
 String hashed = PasswordUtils.hashPassword("secret");
 boolean valid = PasswordUtils.checkPassword("secret", hashed);
 
-// API key generation
 String apiKey = KeyUtils.generateApiKey();
-
-// Secure password generation
-PasswordGenerator gen = new PasswordGenerator();
-String password = gen.generateSecurePassword();
 ```
-
-## Modules
-
-| Class | Package | Description |
-|---|---|---|
-| `Arguments` | `cli` | CLI argument parser with `.env/` directory and environment variable fallback |
-| `PasswordUtils` | `utils` | PBKDF2 password hashing and verification |
-| `KeyUtils` | `utils` | Cryptographic API key generation |
-| `PasswordGenerator` | `utils` | Secure random password generation |
-| `MathUtils` | `utils` | BigDecimal arithmetic helpers |
-
-## Requirements
-
-- Java 8+
 
 ## License
 
-Copyright (c) Finn Birich. All rights reserved.
+[![Apache License 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
